@@ -27,7 +27,7 @@ public class JaversSnapshotsService {
 	}
 
 	@Autowired
-	JaversFilterService javersFliFilterService;
+	JaversFilterService javersFilterService;
 
 	/**
 	 * This method is used to get snapshots of any object
@@ -41,12 +41,25 @@ public class JaversSnapshotsService {
 	}
 
 	/**
+	 * This method is used to get snapshots on any object using filters
+	 * 
+	 * @param filterVO
+	 * @return
+	 */
+	public String getSnapshotsOnAnyObjectUsingFilter(final FilterVO filterVO) {
+		QueryBuilder jqlQuery = QueryBuilder.anyDomainObject();
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
+		List<CdoSnapshot> snapshots = javers.findSnapshots(jqlQuery.build());
+		return javers.getJsonConverter().toJson(snapshots);
+	}
+
+	/**
 	 * This method is used to get snapshots of particular class
 	 * 
 	 * @param cls
 	 * @return
 	 */
-	public String getSnapshotsByClass(Class cls) {
+	public String getSnapshotsByClass(final Class cls) {
 		QueryBuilder jqlQuery = QueryBuilder.byClass(cls);
 		List<CdoSnapshot> snapshots = javers.findSnapshots(jqlQuery.build());
 		return javers.getJsonConverter().toJson(snapshots);
@@ -59,7 +72,7 @@ public class JaversSnapshotsService {
 	 * @param id
 	 * @return
 	 */
-	public String getSnapshotsByEntity(Class cls, int id) {
+	public String getSnapshotsByEntity(final Class cls, final int id) {
 		QueryBuilder jqlQuery = QueryBuilder.byInstanceId(id, cls);
 		List<CdoSnapshot> snapshots = javers.findSnapshots(jqlQuery.build());
 		return javers.getJsonConverter().toJson(snapshots);
@@ -73,7 +86,7 @@ public class JaversSnapshotsService {
 	 * @param property
 	 * @return
 	 */
-	public String getSnapshotsByValueObject(Class cls, int id, String property) {
+	public String getSnapshotsByValueObject(final Class cls, final int id, final String property) {
 		QueryBuilder jqlQuery = null;
 		if (id > 0) {
 			jqlQuery = QueryBuilder.byValueObjectId(id, cls, property);
@@ -91,9 +104,9 @@ public class JaversSnapshotsService {
 	 * @param filterVO
 	 * @return
 	 */
-	public String getSnapshotsByClassUsingFilter(Class cls, FilterVO filterVO) {
+	public String getSnapshotsByClassUsingFilter(final Class cls, final FilterVO filterVO) {
 		QueryBuilder jqlQuery = QueryBuilder.byClass(cls);
-		jqlQuery = javersFliFilterService.addFilters(jqlQuery, filterVO);
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
 		List<CdoSnapshot> snapshots = javers.findSnapshots(jqlQuery.build());
 		return javers.getJsonConverter().toJson(snapshots);
 	}
@@ -106,9 +119,9 @@ public class JaversSnapshotsService {
 	 * @param filterVO
 	 * @return
 	 */
-	public String getSnapshotsByEntityUsingFilter(Class cls, int id, FilterVO filterVO) {
+	public String getSnapshotsByEntityUsingFilter(final Class cls, final int id, final FilterVO filterVO) {
 		QueryBuilder jqlQuery = QueryBuilder.byInstanceId(id, cls);
-		jqlQuery = javersFliFilterService.addFilters(jqlQuery, filterVO);
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
 		List<CdoSnapshot> snapshots = javers.findSnapshots(jqlQuery.build());
 		return javers.getJsonConverter().toJson(snapshots);
 	}

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,13 +28,6 @@ public class AuditController {
 
 	@Autowired
 	JaversChangesService javersChangesService;
-
-	private final Javers javers;
-
-	@Autowired
-	public AuditController(Javers javers) {
-		this.javers = javers;
-	}
 
 	/**
 	 * This method is used to get snapshot,changes or shadows on any object
@@ -64,6 +58,35 @@ public class AuditController {
 	}
 
 	/**
+	 * This method is used to get snapshot,changes or shadows on any object using
+	 * filters
+	 * 
+	 * @param dataType
+	 * @param filterVO
+	 * @return
+	 */
+	@RequestMapping(value = "/{dataType}/filter", method = RequestMethod.PUT)
+	public String getQueryTypeWithFilter(@PathVariable final String dataType, @RequestBody FilterVO filterVO) {
+		String result;
+		switch (dataType.toLowerCase()) {
+		case JaversConstants.SNAPSHOTS:
+			result = javersSnapshotsService.getSnapshotsOnAnyObjectUsingFilter(filterVO);
+			break;
+		case JaversConstants.CHANGES:
+			result = javersChangesService.getChangesOnAnyObjectUsingFilter(filterVO);
+			break;
+		case JaversConstants.SHADOWS:
+			result = javersShadowsService.getShadowsOnAnyObject();
+			break;
+
+		default:
+			result = ErrorConstants.ERROR_OCCOURED;
+			break;
+		}
+		return result;
+	}
+
+	/**
 	 * This method is used to get snapshot,changes or shadows on particular entity
 	 * 
 	 * @param dataType
@@ -89,7 +112,7 @@ public class AuditController {
 			break;
 
 		default:
-			result = "error";
+			result = ErrorConstants.ERROR_OCCOURED;
 			break;
 		}
 		return result;
@@ -173,7 +196,7 @@ public class AuditController {
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	@RequestMapping("/{dataType}/class/{className}/filter")
+	@RequestMapping(value = "/{dataType}/class/{className}/filter", method = RequestMethod.PUT)
 	public String getClassResultUsingFilter(@PathVariable final String dataType, @PathVariable final String className,
 			@RequestBody FilterVO filterVO) throws ClassNotFoundException {
 		Class cls = Class.forName(className);
@@ -190,7 +213,7 @@ public class AuditController {
 			break;
 
 		default:
-			result = "error";
+			result = ErrorConstants.ERROR_OCCOURED;
 			break;
 		}
 		return result;
@@ -208,9 +231,9 @@ public class AuditController {
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	@RequestMapping("/{dataType}/entities/{className}/{id}/filter")
+	@RequestMapping(value = "/{dataType}/entities/{className}/{id}/filter", method = RequestMethod.PUT)
 	public String getEntityResultUsingFilter(@PathVariable final String dataType, @PathVariable final String className,
-			final int id, @RequestBody FilterVO filterVO) throws ClassNotFoundException {
+			@PathVariable final int id, @RequestBody FilterVO filterVO) throws ClassNotFoundException {
 		Class cls = Class.forName(className);
 		String result;
 		switch (dataType.toLowerCase()) {

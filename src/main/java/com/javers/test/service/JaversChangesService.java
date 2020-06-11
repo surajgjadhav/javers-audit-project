@@ -27,7 +27,7 @@ public class JaversChangesService {
 	}
 
 	@Autowired
-	JaversFilterService javersFliFilterService;
+	JaversFilterService javersFilterService;
 
 	/**
 	 * This method is used to get changes on any object
@@ -36,6 +36,19 @@ public class JaversChangesService {
 	 */
 	public String getChangesOnAnyObject() {
 		QueryBuilder jqlQuery = QueryBuilder.anyDomainObject();
+		List<Change> changes = javers.findChanges(jqlQuery.build());
+		return javers.getJsonConverter().toJson(changes);
+	}
+
+	/**
+	 * This method is used to get the changes on any object using filter
+	 * 
+	 * @param filterVO
+	 * @return
+	 */
+	public String getChangesOnAnyObjectUsingFilter(final FilterVO filterVO) {
+		QueryBuilder jqlQuery = QueryBuilder.anyDomainObject();
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
 		List<Change> changes = javers.findChanges(jqlQuery.build());
 		return javers.getJsonConverter().toJson(changes);
 	}
@@ -93,7 +106,7 @@ public class JaversChangesService {
 	 */
 	public String getChangesByClassUsingFilter(Class cls, FilterVO filterVO) {
 		QueryBuilder jqlQuery = QueryBuilder.byClass(cls);
-		jqlQuery = javersFliFilterService.addFilters(jqlQuery, filterVO);
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
 		List<Change> changes = javers.findChanges(jqlQuery.build());
 		return javers.getJsonConverter().toJson(changes);
 	}
@@ -108,7 +121,7 @@ public class JaversChangesService {
 	 */
 	public String getChangesByEntityUsingFilter(Class cls, int id, FilterVO filterVO) {
 		QueryBuilder jqlQuery = QueryBuilder.byInstanceId(id, cls);
-		jqlQuery = javersFliFilterService.addFilters(jqlQuery, filterVO);
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
 		List<Change> changes = javers.findChanges(jqlQuery.build());
 		return javers.getJsonConverter().toJson(changes);
 	}

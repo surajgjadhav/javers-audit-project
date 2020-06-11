@@ -46,7 +46,7 @@ public class JaversShadowsService {
 	 * @param cls
 	 * @return
 	 */
-	public String getShadowsByClass(Class cls) {
+	public String getShadowsByClass(final Class cls) {
 		QueryBuilder jqlQuery = QueryBuilder.byClass(cls);
 		List<Shadow<Object>> shadows = javers.findShadows(jqlQuery.build());
 		return javers.getJsonConverter().toJson(shadows);
@@ -59,7 +59,7 @@ public class JaversShadowsService {
 	 * @param id
 	 * @return
 	 */
-	public String getShadowsByEntity(Class cls, int id) {
+	public String getShadowsByEntity(final Class cls, final int id) {
 		QueryBuilder jqlQuery = QueryBuilder.byInstanceId(id, cls);
 		List<Shadow<Object>> shadows = javers.findShadows(jqlQuery.build());
 		return javers.getJsonConverter().toJson(shadows);
@@ -73,7 +73,7 @@ public class JaversShadowsService {
 	 * @param property
 	 * @return
 	 */
-	public String getShadowsByValueObject(Class cls, int id, String property) {
+	public String getShadowsByValueObject(final Class cls, final int id, final String property) {
 		QueryBuilder jqlQuery = null;
 		if (id > 0) {
 			jqlQuery = QueryBuilder.byValueObjectId(id, cls, property);
@@ -91,7 +91,7 @@ public class JaversShadowsService {
 	 * @param filterVO
 	 * @return
 	 */
-	public String getShadowsByClassUsingFilter(Class cls, FilterVO filterVO) {
+	public String getShadowsByClassUsingFilter(final Class cls, final FilterVO filterVO) {
 		QueryBuilder jqlQuery = QueryBuilder.byClass(cls);
 		jqlQuery = javersFliFilterService.addFilters(jqlQuery, filterVO);
 		List<Shadow<Object>> shadows = javers.findShadows(jqlQuery.build());
@@ -106,7 +106,7 @@ public class JaversShadowsService {
 	 * @param filterVO
 	 * @return
 	 */
-	public String getShadowsByEntityUsingFilter(Class cls, int id, FilterVO filterVO) {
+	public String getShadowsByEntityUsingFilter(final Class cls, final int id, final FilterVO filterVO) {
 		QueryBuilder jqlQuery = QueryBuilder.byInstanceId(id, cls);
 		jqlQuery = javersFliFilterService.addFilters(jqlQuery, filterVO);
 		List<Shadow<Object>> shadows = javers.findShadows(jqlQuery.build());
