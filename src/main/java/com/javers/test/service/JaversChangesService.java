@@ -30,7 +30,7 @@ public class JaversChangesService {
 	JaversFilterService javersFilterService;
 
 	/**
-	 * This method is used to get changes on any object
+	 * This method is used to get changes on all objects
 	 * 
 	 * @return
 	 */
@@ -41,7 +41,7 @@ public class JaversChangesService {
 	}
 
 	/**
-	 * This method is used to get the changes on any object using filter
+	 * This method is used to get the changes on all objects using filter
 	 * 
 	 * @param filterVO
 	 * @return

@@ -27,10 +27,10 @@ public class JaversShadowsService {
 	}
 
 	@Autowired
-	JaversFilterService javersFliFilterService;
+	JaversFilterService javersFilterService;
 
 	/**
-	 * This method is used to get Shadows of any Object
+	 * This method is used to get Shadows of all Objects
 	 * 
 	 * @return
 	 */
@@ -40,6 +40,18 @@ public class JaversShadowsService {
 		return javers.getJsonConverter().toJson(shadows);
 	}
 
+	/**
+	 * This method is used to get Shadows of all Objects using filter
+	 * 
+	 * @return
+	 */
+	public String getShadowsOnAnyObjectUsingFilter(final FilterVO filterVO) {
+		QueryBuilder jqlQuery = QueryBuilder.anyDomainObject();
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
+		List<Shadow<Object>> shadows = javers.findShadows(jqlQuery.build());
+		return javers.getJsonConverter().toJson(shadows);
+	}
+	
 	/**
 	 * This method is used to get shadows for given class
 	 * 
@@ -93,7 +105,7 @@ public class JaversShadowsService {
 	 */
 	public String getShadowsByClassUsingFilter(final Class cls, final FilterVO filterVO) {
 		QueryBuilder jqlQuery = QueryBuilder.byClass(cls);
-		jqlQuery = javersFliFilterService.addFilters(jqlQuery, filterVO);
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
 		List<Shadow<Object>> shadows = javers.findShadows(jqlQuery.build());
 		return javers.getJsonConverter().toJson(shadows);
 	}
@@ -108,7 +120,7 @@ public class JaversShadowsService {
 	 */
 	public String getShadowsByEntityUsingFilter(final Class cls, final int id, final FilterVO filterVO) {
 		QueryBuilder jqlQuery = QueryBuilder.byInstanceId(id, cls);
-		jqlQuery = javersFliFilterService.addFilters(jqlQuery, filterVO);
+		jqlQuery = javersFilterService.addFilters(jqlQuery, filterVO);
 		List<Shadow<Object>> shadows = javers.findShadows(jqlQuery.build());
 		return javers.getJsonConverter().toJson(shadows);
 	}

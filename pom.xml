@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.javers.test</groupId>
-	<artifactId>javers-audit-project</artifactId>
+	<artifactId>pisys-svc-audit</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>javers-audit-project</name>
+	<name>pisys-svc-audit</name>
 	<description>Demo project for javers</description>
 
 	<properties>

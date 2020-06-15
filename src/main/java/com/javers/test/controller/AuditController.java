@@ -1,7 +1,9 @@
 package com.javers.test.controller;
 
-import org.javers.core.Javers;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.javers.test.constants.ErrorConstants;
 import com.javers.test.constants.JaversConstants;
+import com.javers.test.constants.QueryConstants;
 import com.javers.test.service.JaversChangesService;
 import com.javers.test.service.JaversShadowsService;
 import com.javers.test.service.JaversSnapshotsService;
@@ -28,6 +31,9 @@ public class AuditController {
 
 	@Autowired
 	JaversChangesService javersChangesService;
+
+	@Autowired
+	JdbcTemplate jdbcTemplate;
 
 	/**
 	 * This method is used to get snapshot,changes or shadows on any object
@@ -76,7 +82,7 @@ public class AuditController {
 			result = javersChangesService.getChangesOnAnyObjectUsingFilter(filterVO);
 			break;
 		case JaversConstants.SHADOWS:
-			result = javersShadowsService.getShadowsOnAnyObject();
+			result = javersShadowsService.getShadowsOnAnyObjectUsingFilter(filterVO);
 			break;
 
 		default:
@@ -253,6 +259,17 @@ public class AuditController {
 		}
 		return result;
 
+	}
+
+	/**
+	 * This method is used to get the list of classes on which auditing is done
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/classList")
+	public List<String> getClassList() {
+		List<String> result = jdbcTemplate.queryForList(QueryConstants.GET_CLASS_LIST, String.class);
+		return result;
 	}
 
 }

@@ -30,7 +30,7 @@ public class JaversSnapshotsService {
 	JaversFilterService javersFilterService;
 
 	/**
-	 * This method is used to get snapshots of any object
+	 * This method is used to get snapshots of all objects
 	 * 
 	 * @return
 	 */
@@ -41,7 +41,7 @@ public class JaversSnapshotsService {
 	}
 
 	/**
-	 * This method is used to get snapshots on any object using filters
+	 * This method is used to get snapshots on all objects using filter
 	 * 
 	 * @param filterVO
 	 * @return

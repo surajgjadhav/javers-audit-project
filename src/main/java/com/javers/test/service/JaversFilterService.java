@@ -37,6 +37,9 @@ public class JaversFilterService {
 		if (null != filterVO.getToDate()) {
 			jqlQuery.to(filterVO.getToDate());
 		}
+		if (filterVO.getSkip() > 0) {
+			jqlQuery.skip(filterVO.getSkip());
+		}
 		return jqlQuery;
 	}
 }
